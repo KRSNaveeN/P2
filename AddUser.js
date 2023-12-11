@@ -1,52 +1,99 @@
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 import Button from '../UI/Button'
 import ErrorModal from '../UI/ErrorModal';
 import Card from '../UI/Card';
 import classes from '../Users/AddUser.module.css'
   
 const AddUser = (props)=>{
-const [username, setUsername] = useState('');
+
+// const [username, setUsername] = useState('');
+// const [age,setAge] = useState('');
+
 const [error,setError]=useState();
-const [age,setAge] = useState('');
+
+let naam = useRef();
+let agee =useRef();
+let college =useRef();
+
 
     function submitHandler(e){
         e.preventDefault();
-        if(username.trim().length === 0 && age.trim().length === 0){
+
+        let x = naam.current.value;
+        let y = agee.current.value;
+        let z = college.current.value;
+
+        // if(username.trim().length === 0 && age.trim().length === 0){
+        //     setError({
+        //         title:"Invalid Input",
+        //         message: "Please enter a valid name and age"
+        //     })
+        //     return;
+        // }
+
+        // if(username.trim().length === 0 ){
+        //     setError({
+        //         title:"Invalid Name",
+        //         message : "Please enter a valid name"
+        //     })
+        //     return;
+        // }
+        // if(+age < 1){
+        //     setError({
+        //         title:"Invalid age",
+        //         message:"Please enter a valid age"
+        //     })
+        //     return;
+        // }
+
+        if(x.trim().length === 0 && y.trim().length === 0 && z.trim().length === 0){
             setError({
                 title:"Invalid Input",
-                message: "Please enter a valid name and age"
+                message: "Please enter a valid name and age and length"
             })
             return;
         }
-        if(username.trim().length === 0 ){
+        if(x.trim().length === 0 ){
             setError({
                 title:"Invalid Name",
                 message : "Please enter a valid name"
             })
             return;
         }
-        if(+age < 1){
+        if(+y < 1){
             setError({
                 title:"Invalid age",
                 message:"Please enter a valid age"
             })
             return;
         }
-        props.adduser({name: username, age:age})
+        if(z.trim().length === 0 ){
+            setError({
+                title:"Invalid college",
+                message:"Please enter a valid college name"
+            })
+            return;
+        }
 
-       console.log(username, age);
-       setUsername('');
-       setAge('')
-       
+      
+        props.adduser({name: x, age:y, college :z});
+
+       console.log(x, y,z);
+
+    //    setUsername('');
+    //    setAge('')
+       naam.current.value='';
+       agee.current.value='';
+       college.current.value ='';
         };
 
-        function namechangeHandler(event){
-             setUsername(event.target.value);
-        }
+        // function namechangeHandler(event){
+        //      setUsername(event.target.value);
+        // }
 
-        function agechangeHandler(event){
-            setAge(event.target.value);
-        }
+        // function agechangeHandler(event){
+        //     setAge(event.target.value);
+        // }
 
         function errorHandler(){
             setError(null);
@@ -59,11 +106,16 @@ const [age,setAge] = useState('');
        <div>
            <label htmlFor="name">Username</label>
            
-           <input type="text" value={username} id='name' onChange={namechangeHandler}/>
+           <input ref={naam} type="text"  id='name'/>
        </div>
        <div>
            <label htmlFor="age">Enter Age</label>
-           <input type="number" value={age} id="age" onChange={agechangeHandler}/>
+           <input ref={agee} type="number"  id="age"/>
+       </div>
+
+       <div>
+           <label htmlFor="clg">Enter College</label>
+           <input ref={college} type="text"  id="clg"/>
        </div>
        <Button type='submit' >Add User</Button> 
     </form>
