@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useReducer, useContext } from 'react';
+import React, { useState,useEffect,useReducer, useContext, useRef } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
@@ -31,7 +31,8 @@ const Login = () => {
   let authctx = useContext(Context);
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
-
+let emailref = useRef();
+let passwordref = useRef();
   const [emailstate, dispatchfun] = useReducer(emailReducer, {value : "", valid : undefined})
    const [passwordstate, dispatch] = useReducer(passwordReducer, {value : '', valid : undefined})
 
@@ -42,6 +43,8 @@ const Login = () => {
   const [clgisvalid, setClgvalid] = useState();
 
   const [formIsValid, setFormIsValid] = useState(false);
+
+  useRef()
 
   useEffect(()=>{
 
@@ -89,7 +92,15 @@ const Login = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    if(formIsValid){
     authctx.onLogin(emailstate.value, passwordstate.value);
+    }
+    else if(!emailstate.valid){
+        emailref.current.activate();
+    }
+    else{
+       passwordref.current.activate();
+    }
   };
 
   return (
@@ -108,7 +119,7 @@ const Login = () => {
             onChange={emailChangeHandler}
             onBlur={validateEmailHandler}
           /> */}
-          <Input type="email" id="email" label='email' value = {emailstate.value} valid ={emailstate.valid} onchange={emailChangeHandler} onblur={validateEmailHandler}/>
+          <Input ref={emailref} type="email" id="email" label='email' value = {emailstate.value} valid ={emailstate.valid} onchange={emailChangeHandler} onblur={validateEmailHandler}/>
         {/* </div> */}
         {/* <div
           className={`${classes.control} ${
@@ -124,7 +135,7 @@ const Login = () => {
             onBlur={validatePasswordHandler}
           />
         </div> */}
-         <Input type="password" id="password" label='Password' value = {passwordstate.value} valid ={passwordstate.valid} onchange={passwordChangeHandler} onblur={validatePasswordHandler}/>
+         <Input ref={passwordref} type="password" id="password" label='Password' value = {passwordstate.value} valid ={passwordstate.valid} onchange={passwordChangeHandler} onblur={validatePasswordHandler}/>
 
         <div
           className={`${classes.control} ${
@@ -141,7 +152,7 @@ const Login = () => {
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid} onClick={authctx.onLogin}>
+          <Button type="submit" className={classes.btn}>
             Login
           </Button>
         </div>
