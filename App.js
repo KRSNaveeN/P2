@@ -1,43 +1,55 @@
-import React, {useContext} from 'react';
 
-import Login from './components/Login/Login';
-import Home from './components/Home/Home';
-import MainHeader from './components/MainHeader/MainHeader';
-import Context from './store/context';
-
+import { useState } from 'react';
+import './App.css';
+import Additem from './Components/Additem';
+import Userlist from './Components/Userlist';
 
 function App() {
- let ctx = useContext(Context);
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const[electronics, setElectronics]= useState([]);
+  const [skincare, setSkincare] =useState([]);
+  const[food, setFood] =useState([]);
+  function data(input){
+     console.log(input);
+     if(input.option === "Electronics"){
+        setElectronics((pre)=>[...pre, input]);
+        
+     }
+     else if(input.option === 'Skincare'){
+        setSkincare((pre)=>[...pre, input])
+     }
+     else{
+          setFood((pre)=>[...pre, input])
+     }
 
-  // useEffect(()=>{
-  //   if(localStorage.getItem('loggedin') === "1"){
-  //     setIsLoggedIn(true);
-  //   }
-  // }, [])
+    //  console.log(electroni)
+  }
 
-  // const loginHandler = (email, password) => {
-  //   // We should of course check email and password
-  //   // But it's just a dummy/ demo anyways
-  //   setIsLoggedIn(true);
-  //   localStorage.setItem("loggedin", '1')
-  // };
+  function remove(input){
+    console.log(input);
+    if(input.option === 'Electronics'){
+      setElectronics((pre)=> {
+        return pre.filter((itemm)=> input.item != itemm.item);
+      })
+    }
 
-  // const logoutHandler = () => {
-  //   setIsLoggedIn(false);
-  //   localStorage.removeItem("loggedin");
-  // };
+    if(input.option === "Skincare"){
+      setSkincare((pre)=> {
+        return pre.filter((itemm)=> input.item != itemm.item);
+      })
+    }
 
+    if(input.option === "Food"){
+      setFood((pre)=> {
+        return pre.filter((itemm)=> input.item != itemm.item);
+      })
+    }
+    
+  }
   return (
-    <React.Fragment>
-      
-      <MainHeader  />
-      <main>
-        {!ctx.isLoggedIn && <Login />}
-        {ctx.isLoggedIn && <Home  />}
-      </main>
-      
-    </React.Fragment>
+    <div >
+     <Additem data={data}/>
+     <Userlist electronics={electronics} food={food} skincare={skincare} remove={remove}/>
+    </div>
   );
 }
 
